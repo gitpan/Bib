@@ -1,0 +1,5 @@
+Sample use of Text::Bib.
+Run this as:
+
+	perl sample < sample.bib
+

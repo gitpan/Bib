@@ -1,0 +1,39 @@
+#!/usr/bin/perl5 -Tw
+#
+# sample -- test the Bib module.
+#
+# $Id: sample,v 1.1 1995/11/30 06:46:58 eryq Exp eryq $
+
+use strict 'refs';
+
+require Text::Bib;
+
+# Set up parsing options so as to word-wrap all values:
+my $opts = Text::Bib->makeOpts(Newline => 'TOSPACE', 
+			       LeadWhite => 'KILLALL');
+
+# Parse the file:
+print "About to read .bib input from stdin...\n\n";
+my $bib;
+my $i = 0;
+while ($bib = Text::Bib->read(STDIN, $opts)) {
+    print "Record:   ", ++$i, "\n";
+    print "At line:  ", $bib->lineno(), "\n";
+    print "Title:    ", $bib->title(), "\n";
+    print "Authors:  ", join(', ', $bib->anyAuthors()), "\n";
+    print "   Corp author:    ", join(', ', $bib->corpAuthors()), "\n";
+    print "   Human authors:  ", join(', ', $bib->authors()), "\n";
+    print "Keywords: ", join(', ', sort($bib->keywords())), "\n";
+    print "Abstract? ", ($bib->abstract() ? 'yes' : 'no'), "\n";
+    print "\n";
+
+    $bib->output();
+}
+defined($bib) || die("parsing failed: " . Text::Bib->lastError());
+
+print "\nDone!\n";
+exit(0);
+
+#------------------------------------------------------------
+1;
+
